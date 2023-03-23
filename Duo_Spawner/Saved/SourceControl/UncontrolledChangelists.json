@@ -5,6 +5,10 @@
 			"guid": "00000000000000000000000000000000",
 			"description": "Default Uncontrolled Changelist",
 			"files": [
+				"D:/Exercice/Duo_Spawner_Character/Duo_Spawner/Content/BP/SpawnerBP.uasset",
+				"D:/Exercice/Duo_Spawner_Character/Duo_Spawner/Content/Levels/Character.umap",
+				"D:/Exercice/Duo_Spawner_Character/Duo_Spawner/Content/BP/MainCharacterBP.uasset",
+				"D:/Exercice/Duo_Spawner_Character/Duo_Spawner/Content/BP/MyMainCharacter.uasset",
 				"D:/UE_Projects/Duo_Spawner_Character/Duo_Spawner/Content/Levels/Character.umap",
 				"D:/UE_Projects/Duo_Spawner_Character/Duo_Spawner/Content/BP/MyMainCharacter.uasset"
 			]

@@ -5,9 +5,11 @@
 
 AMainCharacter::AMainCharacter()
 {
- 	// Set thisl character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	springArm = CreateDefaultSubobject<USpringArmComponent>("springArm");
+	camera = CreateDefaultSubobject<UCameraComponent>("camera");
+	springArm->SetupAttachment(RootComponent);
+	camera->SetupAttachment(springArm);
 }
 void AMainCharacter::BeginPlay()
 {
@@ -22,6 +24,18 @@ void AMainCharacter::Tick(float DeltaTime)
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis(input.vertical, this, &AMainCharacter::MoveForward);
+	PlayerInputComponent->BindAxis(input.rotate, this, &AMainCharacter::Rotate);
+}
 
+void AMainCharacter::MoveForward(float _axis)
+{
+	AddMovementInput(GetActorForwardVector() * _axis);
+	onMoveForward.Broadcast(_axis);
+}
+
+void AMainCharacter::Rotate(float _axis)
+{
+	AddControllerPitchInput(_axis);
 }
 
