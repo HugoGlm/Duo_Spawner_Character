@@ -10,11 +10,13 @@ AMainCharacter::AMainCharacter()
 	camera = CreateDefaultSubobject<UCameraComponent>("camera");
 	springArm->SetupAttachment(RootComponent);
 	camera->SetupAttachment(springArm);
+	bUseControllerRotationYaw = true;
 }
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetWorld()->GetFirstPlayerController()->SetPawn(this);
+	GetWorld()->GetFirstPlayerController()->Possess(this);
 }
 void AMainCharacter::Tick(float DeltaTime)
 {
@@ -36,6 +38,6 @@ void AMainCharacter::MoveForward(float _axis)
 
 void AMainCharacter::Rotate(float _axis)
 {
-	AddControllerPitchInput(_axis);
+	AddControllerYawInput(_axis);
 }
 

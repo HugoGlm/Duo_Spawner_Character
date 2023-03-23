@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PointOnPath.h"
 #include "PathComponent.generated.h"
 
 USTRUCT()
@@ -32,6 +33,8 @@ class DUO_SPAWNER_API UPathComponent : public UActorComponent
 
 	UPROPERTY(EditAnywhere)
 		FPathSettings settings;
+
+	FVector point;
 
 public:	
 	UPathComponent();

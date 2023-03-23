@@ -12,6 +12,7 @@ void UPathComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	InitPoints();
+	point = GetOwner()->GetActorLocation();
 }
 void UPathComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -25,14 +26,15 @@ void UPathComponent::IsValidPoint()
 }
 void UPathComponent::MoveOnPath()
 {
-
+	const FVector _spawn = point;
+	DrawDebugBox(GetWorld(), _spawn, FVector(10), FColor::Red);
 }
 void UPathComponent::InitPoints()
 {
 	for (int i = 0; i < settings.numberPoints; i++)
 	{
-		const FVector _point = GetOwner()->GetActorLocation() + settings.position * i;
-		points.Add(_point);
+		point = GetOwner()->GetActorLocation() + settings.position * i;
+		points.Add(point);
 	}
 }
 void UPathComponent::DrawDebug()
@@ -43,5 +45,3 @@ void UPathComponent::DrawDebug()
 		DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), settings.position * i, FColor::Blue);
 	}
 }
-
-
