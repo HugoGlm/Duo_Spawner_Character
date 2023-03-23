@@ -26,7 +26,11 @@ void ASpawner::SpawnEntity()
 {
 	if (!spawnCharacter)
 		return;
-	GetWorld()->SpawnActor<AMainCharacter>(spawnCharacter, GetActorLocation() + settings.locationSpawnObject, FRotator::ZeroRotator);
+	if (settings.numberEntity <= settings.numberMaxEntity)
+	{
+		GetWorld()->SpawnActor<AMainCharacter>(spawnCharacter, GetActorLocation() + settings.locationSpawnObject, FRotator::ZeroRotator);
+	}
+
 }
 
 void ASpawner::UpdateTimer(float& _timer, const float& _maxTime)
@@ -39,6 +43,8 @@ void ASpawner::UpdateTimer(float& _timer, const float& _maxTime)
 		onTimerEnd.Broadcast();
 		_timer = 0;
 		settings.isStarted = false;
+		if (settings.isLooping)
+			settings.isStarted = true;
 	}
 }
 
