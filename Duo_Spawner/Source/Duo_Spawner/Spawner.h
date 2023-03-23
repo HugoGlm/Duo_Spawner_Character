@@ -12,13 +12,17 @@ struct FSpawnSettings
 {
 	GENERATED_BODY()
 	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
-		int numberMaxEntity = 2;
+		int numberMaxEntity = 2;	
+	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
+		int numberEntity = 1;
 	UPROPERTY(EditAnywhere)
 		FVector locationSpawnObject;
 	UPROPERTY(EditAnywhere, Category = Timer, meta = (ClampMin = 1))
 		float maxTime = 3;
 	UPROPERTY(EditAnywhere, Category = Timer);
-		bool isStarted = false;
+		bool isStarted = true;	
+	UPROPERTY(EditAnywhere, Category = Timer);
+		bool isLooping = false;
 	float time = 0;
 	FORCEINLINE float GetTimeProgress() const { return time / maxTime * 100; }
 };
