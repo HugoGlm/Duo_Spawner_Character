@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include"MainCharacter.h"
+#include"Duo_SpawnerGameModeBase.h"
 #include "Spawner.generated.h"
 
 USTRUCT()
@@ -12,9 +13,7 @@ struct FSpawnSettings
 {
 	GENERATED_BODY()
 	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
-		int numberMaxEntity = 2;	
-	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
-		int numberEntity = 1;
+		int numberMaxEntity = 2;
 	UPROPERTY(EditAnywhere)
 		FVector locationSpawnObject;
 	UPROPERTY(EditAnywhere, Category = Timer, meta = (ClampMin = 1))
@@ -22,7 +21,7 @@ struct FSpawnSettings
 	UPROPERTY(EditAnywhere, Category = Timer);
 		bool isStarted = true;	
 	UPROPERTY(EditAnywhere, Category = Timer);
-		bool isLooping = false;
+		bool isLooping = true;
 	float time = 0;
 	FORCEINLINE float GetTimeProgress() const { return time / maxTime * 100; }
 };
@@ -43,6 +42,7 @@ public:
 private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	TArray<AMainCharacter*> GetTabMainCharacterSpawn();
 	UFUNCTION() void SpawnEntity();
 	void UpdateTimer(float& _timer, const float& _maxTime);
 	void DrawDebug();

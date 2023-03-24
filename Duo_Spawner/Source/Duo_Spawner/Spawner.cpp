@@ -22,15 +22,25 @@ void ASpawner::Tick(float DeltaTime)
 	DrawDebugTimer();
 }
 
+TArray<AMainCharacter*> ASpawner::GetTabMainCharacterSpawn()
+{
+	ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
+	//if (!_gm)
+	//	return ;
+	return _gm->GetTabMainCharacter();
+}
+
 void ASpawner::SpawnEntity()
 {
 	if (!spawnCharacter)
 		return;
-	if (settings.numberEntity <= settings.numberMaxEntity)
+	if (GetTabMainCharacterSpawn().Num() < settings.numberMaxEntity)
 	{
-		GetWorld()->SpawnActor<AMainCharacter>(spawnCharacter, GetActorLocation() + settings.locationSpawnObject, FRotator::ZeroRotator);
+		ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
+		if (!_gm)
+			return;
+		_gm->SpawnCharacter(spawnCharacter, GetActorLocation() + settings.locationSpawnObject);
 	}
-
 }
 
 void ASpawner::UpdateTimer(float& _timer, const float& _maxTime)

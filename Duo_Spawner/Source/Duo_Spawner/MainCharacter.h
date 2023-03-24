@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include"MovePathComponent.h"
 #include "MainCharacter.generated.h"
 
 USTRUCT()
@@ -29,15 +30,23 @@ class DUO_SPAWNER_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere)
 		TObjectPtr<UCameraComponent> camera = nullptr;
 	UPROPERTY(EditAnywhere)
+		TObjectPtr<UMovePathComponent> movePath = nullptr;
+	UPROPERTY(EditAnywhere)
 		FInput input;
 	FOnMoveForward onMoveForward;
+	bool isControlled = false;
 public:
 	AMainCharacter();
 	FORCEINLINE FOnMoveForward& OnMoveForward(){ return onMoveForward; }
+	FORCEINLINE void SetController(const bool& _value) { isControlled = _value; }
+	FORCEINLINE bool GetController() { return isControlled; }
+	void InitPath(FPath _path);
 private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float _axis);
 	void Rotate(float _axis);
+	TArray<AMainCharacter*> GetTabMainCharacterSpawn();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

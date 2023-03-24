@@ -7,9 +7,7 @@
 #include "MainCharacter.h"
 #include "CharacterAnim.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class DUO_SPAWNER_API UCharacterAnim : public UAnimInstance
 {
