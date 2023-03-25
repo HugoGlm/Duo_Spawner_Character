@@ -4,6 +4,7 @@
 #include "MovePathComponent.h"
 #include"MainCharacter.h"
 #include"PathSystem.h"
+#include"Kismet/KismetMathLibrary.h"
 
 UMovePathComponent::UMovePathComponent()
 {
@@ -41,9 +42,12 @@ void UMovePathComponent::MoveForPoints()
 {
 	if (!owner||owner->GetController())
 		return;
-	const FVector _newLocation = FMath::Lerp(owner->GetActorLocation(), allPoints[index]->GetActorLocation(), GetWorld()->DeltaTimeSeconds * speed);
+	const FVector _offset = owner->GetOffset();
+	const FVector _newLocation = FMath::VInterpConstantTo(owner->GetActorLocation(), allPoints[index]->GetActorLocation() + _offset, GetWorld()->DeltaTimeSeconds, speed);
+	const FRotator _newRota = UKismetMathLibrary::FindLookAtRotation(_newLocation, allPoints[index]->GetActorLocation() + _offset);
 	owner->SetActorLocation(_newLocation);
-	if (FVector::Distance(owner->GetActorLocation(), allPoints[index]->GetActorLocation()) < 0.2)
+	owner->SetActorRotation(_newRota);
+	if (FVector::Distance(owner->GetActorLocation(), allPoints[index]->GetActorLocation()+_offset) < 15)
 	{
 		index++;
 		if (index == allPoints.Num())

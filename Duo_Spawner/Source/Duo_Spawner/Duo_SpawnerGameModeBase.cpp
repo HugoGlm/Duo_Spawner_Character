@@ -5,9 +5,9 @@
 
 void ADuo_SpawnerGameModeBase::SpawnCharacter(TSubclassOf<AMainCharacter> _type, FVector _location)
 {
-	AMainCharacter* _chara = GetWorld()->SpawnActor<AMainCharacter>(_type, _location, FRotator::ZeroRotator);
 	if (!path)
 		return;
+	AMainCharacter* _chara = GetWorld()->SpawnActor<AMainCharacter>(_type, _location, FRotator::ZeroRotator);
 	_chara->InitPath(path->RandomPath());
 	allMainCharacter.Add(_chara);
 }

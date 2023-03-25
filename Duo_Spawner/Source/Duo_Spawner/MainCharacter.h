@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include"MovePathComponent.h"
 #include "MainCharacter.generated.h"
@@ -17,6 +18,8 @@ struct FInput
 		FName vertical = "Vertical";
 	UPROPERTY()
 		FName rotate = "Rotate";
+	UPROPERTY()
+		FName unPosses = "UnPosses";
 };
 
 
@@ -41,12 +44,13 @@ public:
 	FORCEINLINE void SetController(const bool& _value) { isControlled = _value; }
 	FORCEINLINE bool GetController() { return isControlled; }
 	void InitPath(FPath _path);
+	FORCEINLINE FVector GetOffset() { return FVector(0, 0, GetCapsuleComponent()->GetScaledCapsuleHalfHeight()); }
 private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float _axis);
 	void Rotate(float _axis);
-	TArray<AMainCharacter*> GetTabMainCharacterSpawn();
+	void UnPossesChara();
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include"Duo_SpawnerGameModeBase.h"
 #include "Switcher.generated.h"
 
 USTRUCT()
@@ -15,29 +14,25 @@ struct FInputSwitcheur
 		FName switchChara = "Switch";
 };
 
+class AMainCharacter;
 UCLASS()
 class DUO_SPAWNER_API ASwitcher : public AActor
 {
 	GENERATED_BODY()
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrementSwitch);
 	UPROPERTY(EditAnywhere)
-		TObjectPtr<AMainCharacter> currentChara = nullptr;	
-	UPROPERTY(EditAnywhere)
-		TObjectPtr<AController> fpc = nullptr;
+		TObjectPtr<AMainCharacter> currentChara = nullptr;
 	UPROPERTY(EditAnywhere)
 		FInputSwitcheur input;
 
 	int currentIndexSwitch = 0;
-	FOnIncrementSwitch onIncrementSwitch;
 public:	
 	ASwitcher();
 	TArray<AMainCharacter*> GetTabMainCharacterSpawn();
+	void Switch();
+	void IncrementSwitch();
+	void DecrementSwitch();
 private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	void Switch();
-	void UnSwitch();
-	void IncrementSwitch();
-	void DecrementSwitch();
-	void Init();
+	void DrawDebug();
 };

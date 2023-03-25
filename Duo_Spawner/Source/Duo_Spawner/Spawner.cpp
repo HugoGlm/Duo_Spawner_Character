@@ -22,24 +22,27 @@ void ASpawner::Tick(float DeltaTime)
 	DrawDebugTimer();
 }
 
-TArray<AMainCharacter*> ASpawner::GetTabMainCharacterSpawn()
+int ASpawner::GetTabMainCharacterSize()
 {
 	ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
-	//if (!_gm)
-	//	return ;
-	return _gm->GetTabMainCharacter();
+	if (!_gm)
+		return -1;
+	return _gm->GetTabMainCharacter().Num();
 }
 
 void ASpawner::SpawnEntity()
 {
-	if (!spawnCharacter)
+	if (!spawnCharacter||!settings.spawnLocation)
 		return;
-	if (GetTabMainCharacterSpawn().Num() < settings.numberMaxEntity)
+	int _size = GetTabMainCharacterSize();
+	if (_size < 0)
+		return;
+	if ( _size < settings.numberMaxEntity)
 	{
 		ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
 		if (!_gm)
 			return;
-		_gm->SpawnCharacter(spawnCharacter, GetActorLocation() + settings.locationSpawnObject);
+		_gm->SpawnCharacter(spawnCharacter, settings.spawnLocation->GetActorLocation());
 	}
 }
 
@@ -61,6 +64,8 @@ void ASpawner::UpdateTimer(float& _timer, const float& _maxTime)
 void ASpawner::DrawDebug()
 {
 	DrawDebugSphere(GetWorld(), GetActorLocation(), 20, 10, FColor::Red);
+	DrawDebugSphere(GetWorld(), settings.spawnLocation->GetActorLocation(), 20, 10, FColor::Red);
+	DrawDebugLine(GetWorld(), GetActorLocation(), settings.spawnLocation->GetActorLocation(), FColor::Yellow);
 }
 
 void ASpawner::DrawDebugTimer()

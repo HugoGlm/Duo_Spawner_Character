@@ -2,6 +2,8 @@
 
 
 #include "Switcher.h"
+#include"MainCharacter.h"
+#include"Duo_SpawnerGameModeBase.h"
 
 ASwitcher::ASwitcher()
 {
@@ -11,42 +13,41 @@ ASwitcher::ASwitcher()
 void ASwitcher::BeginPlay()
 {
 	Super::BeginPlay();
-	Init();
 }
 void ASwitcher::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	DrawDebug();
 
+}
+void ASwitcher::DrawDebug()
+{
+	if (!currentChara)
+		return;
+	DrawDebugSphere(GetWorld(), currentChara->GetActorLocation() + currentChara->GetActorUpVector() * 100, 20, 25, FColor::Cyan);
 }
 void ASwitcher::Switch()
 {
-	if (!fpc || GetTabMainCharacterSpawn().Num() == 0)
+	if (!currentChara)
 		return;
-	AMainCharacter* _next = GetTabMainCharacterSpawn()[currentIndexSwitch];
-	if (!_next)
-		return;
-	if (currentChara)
-		currentChara->SetController(false);
-	fpc->Possess(_next);
-	currentChara = _next;
+	GetWorld()->GetFirstPlayerController()->Possess(currentChara);
 	currentChara->SetController(true);
 }
 
 void ASwitcher::IncrementSwitch()
 {
 	currentIndexSwitch++;
-	onIncrementSwitch.Broadcast();
+	if (currentIndexSwitch > GetTabMainCharacterSpawn().Num() - 1)
+		currentIndexSwitch = 0;
+	currentChara = GetTabMainCharacterSpawn()[currentIndexSwitch];
 }
 
-
-void ASwitcher::Init()
+void ASwitcher::DecrementSwitch()
 {
-	onIncrementSwitch.AddDynamic(this, &ASwitcher::Switch);
-	fpc = GetWorld()->GetFirstPlayerController();
-	if (!fpc)
-		return;
-	fpc->InputComponent->BindAction(input.switchChara, EInputEvent::IE_Pressed, this, &ASwitcher::IncrementSwitch);
-	Switch();
+	currentIndexSwitch--;
+	if (currentIndexSwitch < 0)
+		currentIndexSwitch = GetTabMainCharacterSpawn().Num() - 1;
+	currentChara = GetTabMainCharacterSpawn()[currentIndexSwitch];
 }
 
 TArray<AMainCharacter*> ASwitcher::GetTabMainCharacterSpawn()

@@ -25,8 +25,6 @@ void AMainCharacter::InitPath(FPath _path)
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//GetWorld()->GetFirstPlayerController()->SetPawn(this);
-	//GetWorld()->GetFirstPlayerController()->Possess(this);
 }
 void AMainCharacter::Tick(float DeltaTime)
 {
@@ -37,6 +35,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(input.vertical, this, &AMainCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(input.rotate, this, &AMainCharacter::Rotate);
+	PlayerInputComponent->BindAction(input.unPosses, EInputEvent::IE_Pressed, this, &AMainCharacter::UnPossesChara);
 }
 
 void AMainCharacter::MoveForward(float _axis)
@@ -50,18 +49,19 @@ void AMainCharacter::Rotate(float _axis)
 	AddControllerYawInput(_axis);
 }
 
-TArray<AMainCharacter*> AMainCharacter::GetTabMainCharacterSpawn()
+void AMainCharacter::UnPossesChara()
 {
 	ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
-	//if (!_gm)
-	//	return;
-	return _gm->GetTabMainCharacter();
+	if (!_gm)
+		return;
+	_gm->ResetPosses();
+	isControlled = false;
 }
 
 void AMainCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	for (size_t i = 0; i < GetTabMainCharacterSpawn().Num(); i++)
-	{
-		GetTabMainCharacterSpawn().RemoveAt(i);
-	}
+	ADuo_SpawnerGameModeBase* _gm = GetWorld()->GetAuthGameMode<ADuo_SpawnerGameModeBase>();
+	if (!_gm)
+		return;
+	_gm->RemoveChara(this);
 }

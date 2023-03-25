@@ -15,7 +15,7 @@ struct FSpawnSettings
 	UPROPERTY(EditAnywhere, meta = (UIMin = 1, ClampMin = 1, UIMax = 10, ClampMax = 10))
 		int numberMaxEntity = 2;
 	UPROPERTY(EditAnywhere)
-		FVector locationSpawnObject;
+		TObjectPtr<AActor> spawnLocation;
 	UPROPERTY(EditAnywhere, Category = Timer, meta = (ClampMin = 1))
 		float maxTime = 3;
 	UPROPERTY(EditAnywhere, Category = Timer);
@@ -42,7 +42,7 @@ public:
 private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	TArray<AMainCharacter*> GetTabMainCharacterSpawn();
+	int GetTabMainCharacterSize();
 	UFUNCTION() void SpawnEntity();
 	void UpdateTimer(float& _timer, const float& _maxTime);
 	void DrawDebug();
